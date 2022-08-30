@@ -1,5 +1,21 @@
 import { createStore } from "redux";
 import "./App.css";
+
+const IncrimentBy = (payload = {}) => {
+  // payload acces the function data and its property
+  // dispatch function whice on below to connect payload and action together
+  return {
+    type: "INCRIMENT",
+    incrimentby: payload.incrimentby,
+  };
+};
+const DecrimentBy = (payload = {}) => {
+  return {
+    type: "DECRIMENT",
+    decrimentby: payload.decrimentby,
+  };
+};
+
 function App() {
   const store = createStore((state = { count: 0 }, action) => {
     // action coming from  dispatch And action type that we have to write
@@ -7,20 +23,11 @@ function App() {
     switch (action.type) {
       case "INCRIMENT":
         return {
-          count: state.count + 1,
+          count: state.count + action.incrimentby, // this incriment is come for dispatch
         };
       case "DECRIMENT":
         return {
-          count: state.count - 1,
-        };
-      case "INCRIMENTBY5":
-        return {
-          count: state.count + 5,
-        };
-
-      case "INCRIMENTBY10":
-        return {
-          count: state.count + action.IncrimentBYTen, // we can change our state with dynamic value of action property
+          count: state.count - action.decrimentby,
         };
 
       default:
@@ -34,23 +41,12 @@ function App() {
   });
   // Action -  an Object that go to store
   // if we write one more action type it will be get update twice base our argument
-  store.dispatch({
-    type: "INCRIMENT",
-  });
-  store.dispatch({
-    type: "INCRIMENTBY10",
-    IncrimentBYTen: 10, // This is the dynamic value of action
-  });
-  unSubscribe_By_subscribe(); // this is the way unsubscript with subscribe method
-  store.dispatch({
-    type: "DECRIMENT",
-  });
-  store.dispatch({
-    type: "DECRIMENT",
-  });
-  store.dispatch({
-    type: "INCRIMENTBY5",
-  });
+  store.dispatch(IncrimentBy({ incrimentby: 100 }));
+
+  // this is the way unsubscript with subscribe method
+  unSubscribe_By_subscribe();
+
+  store.dispatch(DecrimentBy({ decrimentby: 50 }));
 
   return (
     <div className="App">
