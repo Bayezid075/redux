@@ -17,7 +17,9 @@ const DecrimentBy = (payload = {}) => {
 };
 
 function App() {
-  const store = createStore((state = { count: 0 }, action) => {
+  // Reducer --
+
+  const countReducer = (state = { count: 0 }, action) => {
     // action coming from  dispatch And action type that we have to write
 
     switch (action.type) {
@@ -33,7 +35,9 @@ function App() {
       default:
         return state;
     }
-  });
+  };
+
+  const store = createStore(countReducer);
 
   const unSubscribe_By_subscribe = store.subscribe(() => {
     // subcribe get data when data change
