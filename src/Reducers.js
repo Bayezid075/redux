@@ -1,31 +1,49 @@
-import { createStore, combineReducers } from "redux";
+import { combineReducers, createStore } from "redux";
+import "./App.css";
 
-const DataReducer = (state = [], action) => {
+const InitialStateValue = [];
+const DataReducer = (state = InitialStateValue, action) => {
   switch (action.type) {
     case "ADD":
-      return {};
+      return { Text: 0 };
 
     default:
       return state;
   }
 };
 
-const DemoData = {
-  identity: [
-    {
-      id: "ok2520",
-      name: "Bayezid",
-      email: "mdbayezid791@gmail.com",
-      password: 123456,
-      createdAt: 0,
-    },
-  ],
-  filters: [
-    {
-      name: "zid",
-      sortBy: "name",
-      startDate: undefined,
-      endDate: undefined,
-    },
-  ],
+const sortedByReducerValue = {
+  name: "zid",
+  sortBy: "name",
+  startDate: undefined,
+  endDate: undefined,
 };
+const sortByReducer = (state = sortedByReducerValue, action) => {
+  switch (action.type) {
+    case "SORT":
+      return ["Started Sorting"];
+
+    default:
+      return state;
+  }
+};
+
+const store = createStore(
+  combineReducers({
+    identity: DataReducer,
+    filter: sortByReducer,
+  })
+);
+
+const dataFunc = () => ({
+  type: "ADD",
+});
+const sortFunc = () => ({
+  type: "SORT",
+});
+
+store.dispatch(dataFunc());
+
+store.dispatch(sortFunc());
+
+console.log(store.getState());

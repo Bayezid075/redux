@@ -1,57 +1,53 @@
-import { createStore } from "redux";
+import { combineReducers, createStore } from "redux";
 import "./App.css";
 
-const IncrimentBy = (payload = {}) => {
-  // payload acces the function data and its property
-  // dispatch function whice on below to connect payload and action together
-  return {
-    type: "INCRIMENT",
-    incrimentby: payload.incrimentby,
-  };
-};
-const DecrimentBy = (payload = {}) => {
-  return {
-    type: "DECRIMENT",
-    decrimentby: payload.decrimentby,
-  };
-};
-
 function App() {
-  // Reducer --
-
-  const countReducer = (state = { count: 0 }, action) => {
-    // action coming from  dispatch And action type that we have to write
-
+  const InitialStateValue = [];
+  const DataReducer = (state = InitialStateValue, action) => {
     switch (action.type) {
-      case "INCRIMENT":
-        return {
-          count: state.count + action.incrimentby, // this incriment is come for dispatch
-        };
-      case "DECRIMENT":
-        return {
-          count: state.count - action.decrimentby,
-        };
+      case "ADD":
+        return { Text: 0 };
 
       default:
         return state;
     }
   };
 
-  const store = createStore(countReducer);
+  const sortedByReducerValue = {
+    name: "zid",
+    sortBy: "name",
+    startDate: undefined,
+    endDate: undefined,
+  };
+  const sortByReducer = (state = sortedByReducerValue, action) => {
+    switch (action.type) {
+      case "SORT":
+        return ["Started Sorting"];
 
-  const unSubscribe_By_subscribe = store.subscribe(() => {
-    // subcribe get data when data change
-    console.log(store.getState());
+      default:
+        return state;
+    }
+  };
+
+  const store = createStore(
+    combineReducers({
+      identity: DataReducer,
+      filter: sortByReducer,
+    })
+  );
+
+  const dataFunc = () => ({
+    type: "ADD",
   });
-  // Action -  an Object that go to store
-  // if we write one more action type it will be get update twice base our argument
-  store.dispatch(IncrimentBy({ incrimentby: 100 }));
+  const sortFunc = () => ({
+    type: "SORT",
+  });
 
-  // this is the way unsubscript with subscribe method
-  unSubscribe_By_subscribe();
+  store.dispatch(dataFunc());
 
-  store.dispatch(DecrimentBy({ decrimentby: 50 }));
+  store.dispatch(sortFunc());
 
+  console.log(store.getState());
   return (
     <div className="App">
       <h1> Hello REdux </h1>
